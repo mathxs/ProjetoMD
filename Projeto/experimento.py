@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 #python3 main.py
 
 def salvarPNGeWAV(dados):
-    dados_p_seg[dados].plot().get_figure().savefig('saida/' + str(dados) + '.png')
+    dados_p_seg[dados].plot().get_figure().savefig('EXPERIMENTO/' + str(dados) + '.png')
     plt.close()
-    librosa.output.write_wav('saida/' + str(dados) + '.wav', dados_p_seg[dados].to_numpy(),fs)
+    librosa.output.write_wav('EXPERIMENTO/' + str(dados) + '.wav', dados_p_seg[dados].to_numpy(),fs)
 
 data , fs = librosa.load (r'TREINAMENTO/6a66.wav', None)
 duracao_total = data.shape[0] / fs
