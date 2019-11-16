@@ -173,20 +173,20 @@ y_t_teste = enc.transform(y_teste)
 X = np.hstack(
     (featuresdf.Audio.tolist(), 
     featuresdf.Zero.tolist(),
-    featuresdf.Banda.tolist(),
+    #featuresdf.Banda.tolist(),
     featuresdf.Centro.tolist(),
     featuresdf.Chroma.tolist(),
-    #featuresdf.Mel.tolist(),
+    featuresdf.Mel.tolist(),
     featuresdf.Contraste.tolist(),
     featuresdf.Torre.tolist()
     ))
 X_teste = np.hstack(
     (featuresdf_teste.Audio.tolist(), 
     featuresdf_teste.Zero.tolist(),
-    featuresdf_teste.Banda.tolist(),
+    #featuresdf_teste.Banda.tolist(),
     featuresdf_teste.Centro.tolist(),
     featuresdf_teste.Chroma.tolist(),
-    #featuresdf_teste.Mel.tolist(),
+    featuresdf_teste.Mel.tolist(),
     featuresdf_teste.Contraste.tolist(),
     featuresdf_teste.Torre.tolist()
     ))

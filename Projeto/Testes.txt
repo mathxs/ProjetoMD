@@ -1,0 +1,59 @@
+#Total
+Taxa de acerto do LogisticRegression:  0.5271535580524345
+Taxa de acerto do RandomForestClassifier:  0.5421348314606742
+Taxa de acerto do RandomForestClassifier10000:  0.6928838951310862
+Taxa de acerto do RandomForestClassifier5000:  0.6938202247191011
+
+#Sem Audio
+Taxa de acerto do LogisticRegression:  0.4410112359550562
+Taxa de acerto do RandomForestClassifier:  0.5842696629213483
+Taxa de acerto do RandomForestClassifier5000:  0.6760299625468165
+Taxa de acerto do RandomForestClassifier10000:  0.6769662921348315
+
+#Sem Zero
+Taxa de acerto do LogisticRegression:  0.5187265917602997
+Taxa de acerto do RandomForestClassifier:  0.5468164794007491
+Taxa de acerto do RandomForestClassifier5000:  0.6863295880149812
+Taxa de acerto do RandomForestClassifier10000:  0.6947565543071161
+
+#Sem Banda
+Taxa de acerto do LogisticRegression:  0.5337078651685393
+Taxa de acerto do RandomForestClassifier:  0.5393258426966292
+Taxa de acerto do RandomForestClassifier5000:  0.6956928838951311
+Taxa de acerto do RandomForestClassifier10000:  0.697565543071161
+
+#Sem Centro
+Taxa de acerto do LogisticRegression:  0.5252808988764045
+Taxa de acerto do RandomForestClassifier:  0.5692883895131086
+Taxa de acerto do RandomForestClassifier5000:  0.6928838951310862
+Taxa de acerto do RandomForestClassifier10000:  0.6938202247191011
+
+#Sem Chroma
+Taxa de acerto do LogisticRegression:  0.5168539325842697
+Taxa de acerto do RandomForestClassifier:  0.5777153558052435
+Taxa de acerto do RandomForestClassifier5000:  0.6985018726591761
+Taxa de acerto do RandomForestClassifier10000:  0.6947565543071161
+
+#Sem Mel
+Taxa de acerto do LogisticRegression:  0.4550561797752809
+Taxa de acerto do RandomForestClassifier:  0.31835205992509363
+Taxa de acerto do RandomForestClassifier5000:  0.48782771535580527
+Taxa de acerto do RandomForestClassifier10000:  0.4812734082397004
+
+#Sem Contraste
+Taxa de acerto do LogisticRegression:  0.5187265917602997
+Taxa de acerto do RandomForestClassifier:  0.5617977528089888
+Taxa de acerto do RandomForestClassifier5000:  0.6863295880149812
+Taxa de acerto do RandomForestClassifier10000:  0.6863295880149812
+
+#Sem Torre
+Taxa de acerto do LogisticRegression:  0.5168539325842697
+Taxa de acerto do RandomForestClassifier:  0.5646067415730337
+Taxa de acerto do RandomForestClassifier5000:  0.6891385767790262
+Taxa de acerto do RandomForestClassifier10000:  0.6910112359550562
+
+#Com mel e Audio
+Taxa de acerto do LogisticRegression:  0.5205992509363296
+Taxa de acerto do RandomForestClassifier:  0.5692883895131086
+Taxa de acerto do RandomForestClassifier5000:  0.6891385767790262
+Taxa de acerto do RandomForestClassifier10000:  0.6882022471910112
