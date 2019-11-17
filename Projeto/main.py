@@ -1,3 +1,10 @@
+'''
+pickle.dump(featuresdf,open('train', 'wb'))
+pickle.dump(featuresdf_teste,open('teste', 'wb'))
+
+featuresdf = pickle.load(open('train', 'rb'))
+featuresdf_teste = pickle.load(open('teste', 'rb'))
+'''
 import librosa
 import os
 import pandas as pd
@@ -22,6 +29,7 @@ from sklearn.naive_bayes import MultinomialNB, GaussianNB, BernoulliNB
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestClassifier
 import sklearn.preprocessing as pp
+import pickle
 
 #para compilar instale as bibliotecas pandas, librosa, matplotlib, tensorflow e atualize o colorama, não esquecer das bibliotecas importadas (pip3 install ...)
 #python3 main.py
@@ -233,7 +241,6 @@ rfr.fit(X,y_t)
 clf.fit(X,y_t)
 lr.fit(X,y_t)
 dummy.fit(X,y_t)
-
 print("Taxa de acerto do KNeighborsClassifier1: ", np.mean(y_t_teste == ne1.predict(X_teste)))
 print("Taxa de acerto do KNeighborsClassifier9: ", np.mean(y_t_teste == ne.predict(X_teste)))
 print("Taxa de acerto do KNeighborsClassifier50: ", np.mean(y_t_teste == ne2.predict(X_teste)))
