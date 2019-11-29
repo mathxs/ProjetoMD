@@ -14,6 +14,8 @@ from sklearn.ensemble import RandomForestClassifier
 import sklearn.preprocessing as pp
 import pickle
 from datetime import datetime
+from sklearn import preprocessing
+
 
 #para compilar instale as bibliotecas pandas, librosa, matplotlib, tensorflow e atualize o colorama, não esquecer das bibliotecas importadas (pip3 install ...)
 #python3 main.py
@@ -72,6 +74,15 @@ class Tratando_Dados:
                 contraste = librosa.feature.spectral_contrast(y=data[ini:(ini + quebra_arquivo)],sr=fs)
                 tonnetz = librosa.feature.tonnetz(y=librosa.effects.harmonic(data[ini:(ini + quebra_arquivo)]),sr=fs)
                 
+                #harmonica
+                mfcc_delta = librosa.feature.delta(filtrando)
+                y_harmonic, y_percussive = librosa.effects.hpss(data[ini:(ini + quebra_arquivo)])
+                tempo, beat_frames = librosa.beat.beat_track(y=y_percussive, sr=fs)
+                chromagram = librosa.feature.chroma_cqt(y=y_harmonic, sr=fs)
+                beat_chroma = librosa.util.sync(chromagram, beat_frames, aggregate=np.median)
+                beat_mfcc_delta = librosa.util.sync(np.vstack([filtrando, mfcc_delta]), beat_frames)  
+                #D, wp = librosa.sequence.dtw(filtrando ,chromagram)
+                              
                 mfccsscaled = np.mean(filtrando.T,axis=0)                                
                 zero_rate = np.mean(zero_rate.T,axis=0)
                 banda = np.mean(banda.T,axis=0)
@@ -79,13 +90,16 @@ class Tratando_Dados:
                 chroma_cq = np.mean(chroma_cq.T,axis=0)   
                 mel = np.mean(mel.T,axis=0)   
                 contraste = np.mean(contraste.T,axis=0)   
-                tonnetz = np.mean(tonnetz.T,axis=0)                   
-                
+                tonnetz = np.mean(tonnetz.T,axis=0)
+                beat_mfcc_delta = np.mean(beat_mfcc_delta.T, axis=0)
+                beat_chroma = np.mean(beat_chroma.T, axis=0)
+                #wp = np.mean(wp.T, axis=0)
+                #D = np.mean(D.T, axis=0)
+
                 self.contador += 1
-                print("letra de treino processado:" + str(self.contador))                                            
+                print("letra de teste processado:" + str(self.contador))                                            
 
-                self.dados_mfccsscaled.append([mfccsscaled, zero_rate, banda, centro, chroma_cq, mel, contraste, tonnetz, str(letras[0][i])])
-
+                self.dados_mfccsscaled.append([mfccsscaled, zero_rate, banda, centro, chroma_cq, mel, contraste, tonnetz, beat_mfcc_delta, beat_chroma, str(letras[0][i])])
 
                 #self.salvarPNGeWAV(i,letras[0][i],dados_p_seg,fs)
                 #self.salvarPNG(str(letras[0][i]), mfccs)
@@ -118,6 +132,15 @@ class Tratando_Dados:
                 contraste = librosa.feature.spectral_contrast(y=data[ini:(ini + quebra_arquivo)],sr=fs)
                 tonnetz = librosa.feature.tonnetz(y=librosa.effects.harmonic(data[ini:(ini + quebra_arquivo)]),sr=fs)
                 
+                #harmonica
+                mfcc_delta = librosa.feature.delta(filtrando)
+                y_harmonic, y_percussive = librosa.effects.hpss(data[ini:(ini + quebra_arquivo)])
+                tempo, beat_frames = librosa.beat.beat_track(y=y_percussive, sr=fs)
+                chromagram = librosa.feature.chroma_cqt(y=y_harmonic, sr=fs)
+                beat_chroma = librosa.util.sync(chromagram, beat_frames, aggregate=np.median)
+                beat_mfcc_delta = librosa.util.sync(np.vstack([filtrando, mfcc_delta]), beat_frames)                
+                #D, wp = librosa.sequence.dtw(filtrando ,chromagram)
+                              
                 mfccsscaled = np.mean(filtrando.T,axis=0)                                
                 zero_rate = np.mean(zero_rate.T,axis=0)
                 banda = np.mean(banda.T,axis=0)
@@ -125,18 +148,23 @@ class Tratando_Dados:
                 chroma_cq = np.mean(chroma_cq.T,axis=0)   
                 mel = np.mean(mel.T,axis=0)   
                 contraste = np.mean(contraste.T,axis=0)   
-                tonnetz = np.mean(tonnetz.T,axis=0)                   
+                tonnetz = np.mean(tonnetz.T,axis=0)
+                beat_mfcc_delta = np.mean(beat_mfcc_delta.T, axis=0)
+                beat_chroma = np.mean(beat_chroma.T, axis=0)
+                #wp = np.mean(wp.T, axis=0)
+                #D = np.mean(D.T, axis=0)
+                
                 
                 self.contador += 1
                 print("letra de teste processado:" + str(self.contador))                                            
 
-                self.dados_mfccsscaled_teste.append([mfccsscaled, zero_rate, banda, centro, chroma_cq, mel, contraste, tonnetz, str(letras[0][i])])
+                self.dados_mfccsscaled_teste.append([mfccsscaled, zero_rate, banda, centro, chroma_cq, mel, contraste, tonnetz, beat_mfcc_delta, beat_chroma, str(letras[0][i])])
 
                 #self.salvarPNGeWAV(i,letras[0][i],dados_p_seg,fs)
                 #self.salvarPNG(str(letras[0][i]), mfccs)
 
-pastaTreinamento = input('Entre com o nomes da pasta onde estão os arquivos de treinamento: (Exatamente igual, e sem a /) ')
-pastaTeste = input('Entre com o nomes da pasta onde estão os arquivos de teste: (Exatamente igual, e sem a /) ')
+pastaTreinamento = 'TREINAMENTO'#input('Entre com o nomes da pasta onde estão os arquivos de treinamento: (Exatamente igual, e sem a /) ')
+pastaTeste = 'VALIDACAO'#input('Entre com o nomes da pasta onde estão os arquivos de teste: (Exatamente igual, e sem a /) ')
 
 t0 = datetime.now()
 
@@ -157,8 +185,8 @@ for f in files:
 t2 = datetime.now()
 
 #separando os arquivos
-featuresdf = pd.DataFrame(Dados.dados_mfccsscaled, columns=['Audio','Zero', 'Banda', 'Centro', 'Chroma', 'Mel', 'Contraste', 'Torre', 'Letra'])
-featuresdf_teste = pd.DataFrame(Dados.dados_mfccsscaled_teste, columns=['Audio','Zero', 'Banda', 'Centro', 'Chroma', 'Mel', 'Contraste', 'Torre', 'Letra'])
+featuresdf = pd.DataFrame(Dados.dados_mfccsscaled, columns=['Audio','Zero', 'Banda', 'Centro', 'Chroma', 'Mel', 'Contraste', 'Torre','B_MFCC','B_CHR','D','wp', 'Letra'])
+featuresdf_teste = pd.DataFrame(Dados.dados_mfccsscaled_teste, columns=['Audio','Zero', 'Banda', 'Centro', 'Chroma', 'Mel', 'Contraste', 'Torre', 'B_MFCC','B_CHR','D','wp', 'Letra'])
 
 y = np.array(featuresdf.Letra.tolist()).reshape(-1, 1)
 y_teste = np.array(featuresdf_teste.Letra.tolist()).reshape(-1, 1)
@@ -171,29 +199,61 @@ y_t_teste = enc.transform(y_teste)
 X = np.hstack(
     (featuresdf.Audio.tolist(), 
     featuresdf.Zero.tolist(),
-    #featuresdf.Banda.tolist(),
+    featuresdf.Banda.tolist(),
     featuresdf.Centro.tolist(),
     featuresdf.Chroma.tolist(),
     featuresdf.Mel.tolist(),
     featuresdf.Contraste.tolist(),
-    featuresdf.Torre.tolist()
+    featuresdf.Torre.tolist(),
+    featuresdf.B_MFCC.tolist(),
+    featuresdf.B_CHR.tolist(),
+    #featuresdf.D.tolist(),
+    #featuresdf.wp.tolist()
+
     ))
 X_teste = np.hstack(
     (featuresdf_teste.Audio.tolist(), 
     featuresdf_teste.Zero.tolist(),
-    #featuresdf_teste.Banda.tolist(),
+    featuresdf_teste.Banda.tolist(),
     featuresdf_teste.Centro.tolist(),
     featuresdf_teste.Chroma.tolist(),
     featuresdf_teste.Mel.tolist(),
     featuresdf_teste.Contraste.tolist(),
-    featuresdf_teste.Torre.tolist()
+    featuresdf_teste.Torre.tolist(),
+    featuresdf_teste.B_MFCC.tolist(),
+    featuresdf_teste.B_CHR.tolist(),
+    #featuresdf_teste.D.tolist(),
+    #featuresdf_teste.wp.tolist()
     ))
+
+X =  np.nan_to_num(X)#preprocessing.normalize(np.nan_to_num(X))
+X_teste = np.nan_to_num(X_teste)#preprocessing.normalize(np.nan_to_num(X_teste))
 
 t3 = datetime.now()
 
-rfc = RandomForestClassifier(n_estimators=500)
+rfc = RandomForestClassifier(n_estimators=10000)
 rfc.fit(X,y_t)
-print("Taxa de acerto do RandomForestClassifier: ", np.mean(y_t_teste == rfc.predict(X_teste)))
+
+precisao = rfc.predict(X_teste)
+precisao =  np.stack((precisao, y_t_teste), axis=-1)
+corretude = []
+for i in range(0,len(precisao)):
+    if (precisao[i][0] == precisao[i][1]):
+        corretude.append(1)
+    else:
+        corretude.append(0)
+        
+captchar = []
+i = 0
+while i < len(corretude):
+    if (corretude[i]+corretude[i+1]+corretude[i+2]+corretude[i+3]) == 4:
+        captchar.append(1)
+    else:
+        captchar.append(0)
+    i += 4
+
+#print("Taxa de acerto do RandomForestClassifier: ", np.mean(y_t_teste == rfc.predict(X_teste)))
+print("Taxa de acerto do RandomForestClassifier: ", np.mean(captchar))
 
 t4 = datetime.now()
 
