@@ -62,6 +62,28 @@ def main():
 
   rfc = RandomForestClassifier(n_estimators = 500)
   rfc.fit(X, classes_t_treinamento)
-  print("Taxa de acerto do RandomForestClassifier: ", np.mean(classes_t_teste == rfc.predict(X_teste)))
+  print("Taxa de acerto do RandomForestClassifier da letra: ", np.mean(classes_t_teste == rfc.predict(X_teste)))
+  
+  
+  precisao = rfc.predict(X_teste)
+  precisao =  np.stack((precisao, classes_t_teste), axis=-1)
+  corretude = []
+  for i in range(0,len(precisao)):
+      if (precisao[i][0] == precisao[i][1]):
+          corretude.append(1)
+      else:
+          corretude.append(0)
+        
+  captchar = []
+  i = 0
+  while i < len(corretude):
+      if (corretude[i]+corretude[i+1]+corretude[i+2]+corretude[i+3]) == 4:
+          captchar.append(1)
+      else:
+          captchar.append(0)
+      i += 4
+
+  print("Taxa de acerto do RandomForestClassifierdo captchar: ", np.mean(captchar))
+
 
 main()
